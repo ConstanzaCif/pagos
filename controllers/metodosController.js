@@ -128,3 +128,36 @@ exports.eliminarMetodo = async (req, res) => {
         });
     }
 };
+
+exports.resumenPorMetodo  = async(req, res)  =>{
+    const { fechaInicial, fechaFinal } = req.body;
+    try {
+      const metodos = await MetodoPago.find({ estado: 1 });
+  
+      const resumen = metodos.map(metodo => {
+        let transaccionesFiltradas = metodo.transacciones;
+  
+        if (fechaInicial || fechaFinal) {
+          const fi = fechaInicial ? new Date(fechaInicial) : new Date('1900-01-01');
+          const ff = fechaFinal ? new Date(fechaFinal) : new Date();
+          transaccionesFiltradas = transaccionesFiltradas.filter(tx => {
+            const fechaTx = new Date(tx.createdAt || tx.fecha || metodo.updatedAt); 
+            return fechaTx >= fi && fechaTx <= ff;
+          });
+        }
+  
+        const totalMonto = transaccionesFiltradas.reduce((sum, tx) => sum + tx.monto, 0);
+  
+        return {
+          metodo: metodo.metodo,
+          cantidadTransacciones: transaccionesFiltradas.length,
+          totalRecaudado: totalMonto.toFixed(2)
+        };
+      });
+  
+      return res.status(200).json({ resumen });
+    } catch (error) {
+      console.error("Error al generar el resumen:", error);
+      return res.status(500).json({ mensaje: "Ocurrió un error al generar el resumen" });
+    }
+  }
