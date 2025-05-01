@@ -46,7 +46,6 @@ exports.obtenerMetodoPagoPorId = async (req, res) => {
 
         if (!mongoose.Types.ObjectId.isValid(_id)) {
             return res.status(400).json({
-                status: 400,
                 mensaje: "ID inválido. Asegúrate de que el formato sea correcto."
             });
         }
@@ -55,7 +54,6 @@ exports.obtenerMetodoPagoPorId = async (req, res) => {
 
         if (!metodoPago) {
             return res.status(404).json({
-                status: 404,
                 mensaje: "Método de pago no encontrado."
             });
         }
@@ -79,7 +77,7 @@ exports.create = async (req, res) => {
         const metodoPago = new MetodoPago(req.body);
 
         if (!metodoPago.metodo) {
-            return res.status(400).send('El método de pago es obligatorio');
+            return res.status(400).json({mensaje:'El método de pago es obligatorio'});
         }
 
         const nuevoMetodo = new MetodoPago({
@@ -90,12 +88,11 @@ exports.create = async (req, res) => {
         await nuevoMetodo.save();
 
         res.status(200).json({
-            status: 200,
             mensaje: "Método creado exitosamente"
         });
     } catch (error) {
         console.log(error);
-        res.status(400).send('Hubo un error');
+        res.status(400).json({mensaje:'Hubo un error'});
     }
 };
 
@@ -112,13 +109,11 @@ exports.eliminarMetodo = async (req, res) => {
 
         if (!metodoEliminado) {
             return res.status(404).json({
-                status: 404,
                 mensaje: "Método de pago no encontrado."
             });
         }
 
         res.status(200).json({
-            status: 200,
             mensaje: "Metodo eliminado exitosamente"
         });
     } catch (error) {
