@@ -1779,9 +1779,13 @@ node_modules/.bin/json2yaml.ps1
 node_modules/.bin/yaml2json
 node_modules/.bin/yaml2json.cmd
 node_modules/.bin/yaml2json.ps1
+node_modules/.package-lock.json
 node_modules/@scarf/scarf/LICENSE
 node_modules/@scarf/scarf/README.md
 node_modules/@scarf/scarf/report.js
+node_modules/nodemon/index.d.ts
+node_modules/nodemon/package.json
+node_modules/nodemon/README.md
 node_modules/sprintf-js/.npmignore
 node_modules/sprintf-js/bower.json
 node_modules/sprintf-js/demo/angular.html
@@ -1898,3 +1902,5 @@ node_modules/yamljs/test/spec/example.yml
 node_modules/yamljs/test/spec/YamlSpec.coffee
 node_modules/yamljs/test/spec/YamlSpec.js
 node_modules/yamljs/test/SpecRunner.html
+package-lock.json
+package.json

@@ -164,32 +164,38 @@ async function generarFactura(detalle, cliente, total, totalDescuento) {
             }
         },
         async listById(req, res) {
-            const id = req.params.noTransaccion;
-            const transaccion = await Transaccion.findOne({ noTransaccion: id });
-            const MetodosDePago = transaccion.metodosPago.map(metodo => ({
-                NoTarjeta: metodo.noTarjeta,
-                IdMetodo: metodo.idMetodo,
-                Monto: metodo.monto,
-                Correlativo: metodo.correlativo,
-                IdBanco: metodo.idBanco
-            }));
+            try{
+                const id = req.params.noTransaccion;
+                const transaccion = await Transaccion.findOne({ noTransaccion: id });
+                const MetodosDePago = transaccion.metodosPago.map(metodo => ({
+                    NoTarjeta: metodo.noTarjeta,
+                    IdMetodo: metodo.idMetodo,
+                    Monto: metodo.monto,
+                    Correlativo: metodo.correlativo,
+                    IdBanco: metodo.idBanco
+                }));
+    
+                const transaccionObjeto = {
+                    Transaccion: {
+                        idTransaccion: transaccion._id,
+                        NoAutorizacion: transaccion.noAutorizacion,
+                        NoTransacion: transaccion.noTransaccion,
+                        Fecha: transaccion.fecha,
+                        NoFactura: transaccion.noFactura,
+                        Total: transaccion.total,
+                        IdCaja: transaccion.idCaja,
+                        ServiciosTransaccion: transaccion.servicioTransaccion,
+                        Estado: transaccion.estado,
+                        MetodosDePago: MetodosDePago
+                    }
+                };
+                res.status(200).json(transaccionObjeto);
+                return transaccion;
+            }
+            catch(error){
+                res.status(500).json({mensaje: "Transaccion no encontrada"})
+            }
 
-            const transaccionObjeto = {
-                Transaccion: {
-                    idTransaccion: transaccion._id,
-                    NoAutorizacion: transaccion.noAutorizacion,
-                    NoTransacion: transaccion.noTransaccion,
-                    Fecha: transaccion.fecha,
-                    NoFactura: transaccion.noFactura,
-                    Total: transaccion.total,
-                    IdCaja: transaccion.idCaja,
-                    ServiciosTransaccion: transaccion.servicioTransaccion,
-                    Estado: transaccion.estado,
-                    MetodosDePago: MetodosDePago
-                }
-            };
-            res.status(200).json(transaccionObjeto);
-            return transaccion;
         },
         async list(req, res) {
             const { fechaInicial, fechaFinal } = req.body;

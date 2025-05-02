@@ -33,6 +33,7 @@ module.exports = (app) => {
     router.get('/metodos/obtener', metodo.obtenerMetodosPago);
     router.get('/metodos/obtener/:_id', metodo.obtenerMetodoPagoPorId);
     router.get('/metodos/obtenerTransacciones/:noMetodo', metodo.obtenerTransaccionesMetodo)
+    router.get('/metodos/resumen_metodo_pago', metodo.resumenPorMetodo)
 
     // Cierre de caja
     router.get('/cierres/obtener', cierre.obtenerCierres); 

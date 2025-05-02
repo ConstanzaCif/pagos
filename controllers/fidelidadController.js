@@ -41,7 +41,7 @@ module.exports =
                 }
             )
 
-            return res.status(200).json({mensaje:"Tarjeta agregada exitosamente", noTarjeta:noTarjetaFidelidad})
+            return res.status(200).json({mensaje:"Tarjeta agregada exitosamente", NoTarjeta:noTarjetaFidelidad})
         }
         catch(error){
             console.error("Error al agregar tarjeta:", error); 
