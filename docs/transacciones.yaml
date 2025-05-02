@@ -166,13 +166,13 @@ components:
               IdMetodo:
                 type: integer
                 enum: [1, 2, 3, 4, 5]
-                  description: >
-                    Método de pago. Valores posibles:
-                      1 = Efectivo
-                      2 = Tarjeta de Crédito
-                      3 = Tarjeta de Débito
-                      4 = Transferencia
-                      5 = Fidelidad 
+              description: |-
+                Método de pago. Valores posibles:
+                1 = Efectivo
+                2 = Tarjeta de Crédito
+                3 = Tarjeta de Débito
+                4 = Transferencia
+                5 = Fidelidad
               Monto:
                 type: number
               IdBanco:

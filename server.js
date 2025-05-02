@@ -5,10 +5,14 @@ const cors = require('cors');
 const logger = require('morgan');
 const http = require('http');
 const mongoose = require('mongoose');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
 
 const app = express();
 const port = parseInt(process.env.PORT, 10) || 3001;
 app.use(express.json()); 
+const transaccionesDoc = YAML.load('./docs/Transacciones.yaml');
+app.use('/api-docs/transacciones', swaggerUi.serve, swaggerUi.setup(transaccionesDoc));
 
 const connectDB = async () => {
   try {
