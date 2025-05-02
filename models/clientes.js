@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-//Tarjeta de fidelidad
 const tarjetaFidelidadSchema = new mongoose.Schema({
     noTarjeta: {
         type: String
@@ -19,7 +18,6 @@ const tarjetaFidelidadSchema = new mongoose.Schema({
     },
 });
 
-// Cliente
 const clienteSchema = new mongoose.Schema({
     nombreCliente: {
         type: String,
@@ -52,7 +50,6 @@ const clienteSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    compras: [Number], 
     estado: {
         type: Number,
         default: 1,
