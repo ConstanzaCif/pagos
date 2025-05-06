@@ -123,7 +123,7 @@ exports.create = async (req, res) => {
         res.status(201).json(objetoCierreGuardado);
     } catch (error) {
         console.error('Error al crear cierre de caja:', error);
-        res.status(500).json({ mensaje: 'Error al crear el cierre de caja', error: error.message });
+        res.status(500).json({ mensaje: 'Error al crear el cierre de caja'});
     }
 };
 

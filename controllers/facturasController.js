@@ -23,6 +23,7 @@ async getFacturaById(req, res) {
             factura: {
               NoFactura: factura.noFactura || "",
               Serie: factura.serie || "",
+              Estado: factura.estado,
               Empresa: {
                 NitEmpresa: factura.empresa?.nitEmpresa || "",
                 NombreEmpresa: factura.empresa?.nombreEmpresa || "",

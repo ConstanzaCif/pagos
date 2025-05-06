@@ -15,8 +15,8 @@ module.exports =
         }
     },
     async buscarNit(req, res){
-        const nit = req.params.nit
         try{
+            const nit = req.params.nit
             const cliente = await Cliente.findOne({nit: nit, estado:1}).select('nombreCliente apellidosCliente nit direccion telefono email dpi tarjetaFidelidad estado');
             if(cliente){
                 res.status(200).json({cliente:cliente})

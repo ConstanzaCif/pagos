@@ -10,18 +10,19 @@ const { findOne } = require("../models/clientes");
 
 module.exports = { 
     async create(req,res){
-        const noTransaccion = req.body.NoTransaccion;
-        const monto = req.body.Monto;
-        const descripcion = req.body.Descripcion;
-        const transaccion = await Transaccion.findOne({noTransaccion: noTransaccion});
-        if(!transaccion){
-            return res.status(500).json({ Mensaje: "Transaccion no valida" });
-        }
-        if(monto > transaccion.total)
-        {
-            return res.status(500).json({ Mensaje: "El monto ingresado no es valido" });
-        }
+        console.log("Cuerpo recibido: ", req.body)
         try {
+            const noTransaccion = req.body.NoTransaccion;
+            const monto = req.body.Monto;
+            const descripcion = req.body.Descripcion;
+            const transaccion = await Transaccion.findOne({noTransaccion: noTransaccion});
+            if(!transaccion){
+                return res.status(500).json({ Mensaje: "Transaccion no valida" });
+            }
+            if((monto > transaccion.total)||(!monto)||(monto <=0))
+            {
+                return res.status(500).json({ Mensaje: "El monto ingresado no es valido" });
+            }
             let count = await Devolucion.countDocuments();
             const factura = await Factura.findOne({noFactura:transaccion.noFactura});
             let notaCredito = "NOTA-" + String(count + 1).padStart(5, '0'); 
@@ -53,15 +54,16 @@ module.exports = {
     
     },
     async getAll(req,res){
-        const { fechaInicial, fechaFinal } = req.body;
-        let filtro = {};
-        if (fechaInicial || fechaFinal) {
-          filtro.createdAt = {};
-          if (fechaInicial) filtro.createdAt.$gte = new Date(fechaInicial);
-          if (fechaFinal) filtro.createdAt.$lte = new Date(fechaFinal);
-        }
-      console.log(filtro);
+
         try {
+            const { fechaInicial, fechaFinal } = req.body;
+            let filtro = {};
+            if (fechaInicial || fechaFinal) {
+              filtro.createdAt = {};
+              if (fechaInicial) filtro.createdAt.$gte = new Date(fechaInicial);
+              if (fechaFinal) filtro.createdAt.$lte = new Date(fechaFinal);
+            }
+          console.log(filtro);
             const devoluciones = await Devolucion.find(filtro);
             const devolucionRespuesta = {
                 Devoluciones: devoluciones.map(devolucion => ({

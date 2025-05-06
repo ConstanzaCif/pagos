@@ -46,8 +46,8 @@ exports.eliminarBanco = async (req, res) => {
 };
 
 exports.listarTransacciones = async (req, res) => {
-    const filtro = req.body.idMetodo; 
     try {
+        const filtro = req.body.idMetodo; 
         const idBanco = req.params.IdBanco;
         const banco = await Banco.findById(idBanco);
         console.log(banco)
