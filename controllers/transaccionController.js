@@ -173,7 +173,6 @@ async function generarFactura(detalle, cliente, total, totalDescuento) {
             }
         },
         async listById(req, res) {
-
             try{
                 const id = req.params.noTransaccion;
                 const transaccion = await Transaccion.findOne({ noTransaccion: id });
@@ -183,6 +182,62 @@ async function generarFactura(detalle, cliente, total, totalDescuento) {
                     Monto: metodo.monto,
                     Correlativo: metodo.correlativo,
                     IdBanco: metodo.idBanco
+                }));
+    
+                const transaccionObjeto = {
+                    Transaccion: {
+                        idTransaccion: transaccion._id,
+                        NoAutorizacion: transaccion.noAutorizacion,
+                        NoTransacion: transaccion.noTransaccion,
+                        Fecha: transaccion.fecha,
+                        NoFactura: transaccion.noFactura,
+                        Total: transaccion.total,
+                        IdCaja: transaccion.idCaja,
+                        ServiciosTransaccion: transaccion.servicioTransaccion,
+                        Estado: transaccion.estado,
+                        MetodosDePago: MetodosDePago
+                    }
+                };
+                res.status(200).json(transaccionObjeto);
+                return transaccion;
+            }
+            catch(error){
+                res.status(500).json({mensaje: "Transaccion no encontrada"})
+            }
+
+        },
+        async list(req, res) {
+            const { fechaInicial, fechaFinal } = req.body;
+
+            let filtro = {};
+
+            if (fechaInicial || fechaFinal) {
+                filtro.fecha = {};
+                if (fechaInicial) filtro.fecha.$gte = new Date(fechaInicial);
+                if (fechaFinal) filtro.fecha.$lte = new Date(fechaFinal);
+            }
+
+            try {
+                const transacciones = await Transaccion.find(filtro);
+
+                const resultado = transacciones.map(trans => ({
+                    idTransaccion: trans._id,
+                    NoAutorizacion: trans.noAutorizacion,
+                    NoTransaccion: trans.noTransaccion,
+                    Fecha: trans.fecha,
+                    IdCliente: trans.idCliente,
+                    NoFactura: trans.noFactura,
+                    Total: trans.total,
+                    IdCaja: trans.idCaja,
+                    ServiciosTransaccion: trans.servicioTransaccion,
+                    Estado: trans.estado,
+                    MetodosDePago: trans.metodosPago.map(mp => ({
+                        NoTarjeta: mp.noTarjeta,
+                        IdMetodo: mp.idMetodo,
+                        Monto: mp.monto,
+                        Correlativo: mp.correlativo,
+                        IdBanco: mp.idBanco
+                    }))
                 }));
 
                 const transaccionObjeto = {
