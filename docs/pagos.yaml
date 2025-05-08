@@ -1,0 +1,11 @@
+pagos: 1.0
+info:
+  title: Microservicio de Pagos
+  version: 1.0.0
+  description: Documentación de los endpoints del microservicio
+
+servers:
+  - url: http://localhost:3000/pagos
+    description: Servidor de desarrollo
+  - url: http://137.184.115.238/pagos
+    description: Servidor para pruebas con otros servicios
