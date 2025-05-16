@@ -5,9 +5,12 @@ exports.obtenerMetodosPago = async (req, res) => {
     try {
         const metodosPago = await MetodoPago.find({ estado: 1 }).select('_id metodo');
 
-        res.status(200).json({
-            Metodos: metodosPago
-        });
+        const metodosTransformados = metodosPago.map(metodo => ({
+            idMetodo: metodo._id,
+            Metodo: metodo.metodo
+        }));
+
+        res.status(200).json(metodosTransformados);
     } catch (error) {
         res.status(500).json({
             status: 500,
@@ -21,7 +24,7 @@ exports.obtenerTransaccionesMetodo = async (req, res) => {
     try{
         const metodoPago = await MetodoPago.findOne({noMetodo: metodo})
         if(!metodoPago) {
-            res.status(500).json({mensaje: "El metodo de pago no es valido"})
+            return res.status(500).json({mensaje: "El metodo de pago no es valido"})
         }
         let montoTotal = 0
         const transaccionesMetodo = metodoPago.transacciones
@@ -59,10 +62,9 @@ exports.obtenerMetodoPagoPorId = async (req, res) => {
         }
 
         res.status(200).json({
-            Metodo: {
-                IdMetodo: metodoPago._id,
+
+                idMetodo: metodoPago._id,
                 Metodo: metodoPago.metodo
-            }
         });
     } catch (error) {
         res.status(500).json({
@@ -74,14 +76,14 @@ exports.obtenerMetodoPagoPorId = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const metodoPago = new MetodoPago(req.body);
+        const metodoPago = req.body.Metodo;
 
-        if (!metodoPago.metodo) {
-            return res.status(400).json({mensaje:'El método de pago es obligatorio'});
+        if (!metodoPago) {
+            return res.status(500).json({mensaje:'El método de pago es obligatorio'});
         }
 
         const nuevoMetodo = new MetodoPago({
-            metodo: metodoPago.metodo,
+            metodo: metodoPago,
             estado: 1
         });
 
@@ -108,7 +110,7 @@ exports.eliminarMetodo = async (req, res) => {
         );
 
         if (!metodoEliminado) {
-            return res.status(404).json({
+            return res.status(500).json({
                 mensaje: "Método de pago no encontrado."
             });
         }
@@ -118,14 +120,13 @@ exports.eliminarMetodo = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({
-            status: 500,
-            mensaje: `Ocurrió un error: ${error.message}`
+            mensaje: `Ocurrió un error`
         });
     }
 };
 
 exports.resumenPorMetodo  = async(req, res)  =>{
-    const { fechaInicial, fechaFinal } = req.body;
+    const { fechaInicio, fechaFinal } = req.body;
     try {
       const metodos = await MetodoPago.find({ estado: 1 });
   

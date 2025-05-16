@@ -36,7 +36,7 @@ exports.eliminarBanco = async (req, res) => {
         });
 
         if (!banco) {
-            return res.status(404).json({ mensaje: "Banco no encontrado" });
+            return res.status(500).json({ mensaje: "Banco no encontrado" });
         }
 
         res.json({ mensaje: "Banco eliminado exitosamente"});
@@ -52,7 +52,7 @@ exports.listarTransacciones = async (req, res) => {
         const banco = await Banco.findById(idBanco);
         console.log(banco)
         if (!banco) {
-            return res.status(404).json({ mensaje: "Banco no encontrado" });
+            return res.status(500).json({ mensaje: "Banco no encontrado" });
         }
 
         // Si no se pasa un filtro, usar todas las transacciones

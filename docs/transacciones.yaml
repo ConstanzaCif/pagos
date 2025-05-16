@@ -124,7 +124,7 @@ components:
     FiltroFecha:
       type: object
       properties:
-        fechaInicial:
+        fechaInicio:
           type: string
           format: date
         fechaFinal:

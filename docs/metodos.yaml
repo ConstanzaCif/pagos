@@ -140,7 +140,7 @@ paths:
             schema:
               type: object
               properties:
-                fechaInicial:
+                fechaInicio:
                   type: string
                   format: date
                   example: "2024-01-01"

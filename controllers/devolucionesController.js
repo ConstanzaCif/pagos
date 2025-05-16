@@ -56,11 +56,11 @@ module.exports = {
     async getAll(req,res){
 
         try {
-            const { fechaInicial, fechaFinal } = req.body;
+            const { fechaInicio, fechaFinal } = req.body;
             let filtro = {};
-            if (fechaInicial || fechaFinal) {
+            if (fechaInicio || fechaFinal) {
               filtro.createdAt = {};
-              if (fechaInicial) filtro.createdAt.$gte = new Date(fechaInicial);
+              if (fechaInicio) filtro.createdAt.$gte = new Date(fechaInicio);
               if (fechaFinal) filtro.createdAt.$lte = new Date(fechaFinal);
             }
           console.log(filtro);
@@ -98,7 +98,7 @@ module.exports = {
                 }
             };
             if(!devolucion){
-                return res.status(404).json({ Mensaje: "No se encontro la devolucion" });
+                return res.status(500).json({ Mensaje: "No se encontro la devolucion" });
             }
             return res.status(200).json(devolucionRespuesta);
         } catch (error) {

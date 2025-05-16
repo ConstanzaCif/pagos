@@ -107,14 +107,14 @@ async function generarFactura(detalle, cliente, total, totalDescuento) {
         async listByService(req, res) {
             try
             {
-                const { fechaInicial, fechaFinal } = req.body;
+                const { fechaInicio, fechaFinal } = req.body;
                 const idServicio = req.params.idServicio;
                 let filtro = {};
 
                 filtro.servicioTransaccion = parseInt(idServicio);
-                if (fechaInicial || fechaFinal) {
+                if (fechaInicio || fechaFinal) {
                     filtro.fecha = {};
-                    if (fechaInicial) filtro.fecha.$gte = new Date(fechaInicial);
+                    if (fechaInicio) filtro.fecha.$gte = new Date(fechaInicio);
                     if (fechaFinal) filtro.fecha.$lte = new Date(fechaFinal);
                 }
                 console.log(filtro);
@@ -160,7 +160,7 @@ async function generarFactura(detalle, cliente, total, totalDescuento) {
                 const transaccion = await Transaccion.findOne({ noTransaccion: noTransaccion });
 
                 if (!transaccion) {
-                    return res.status(404).json({ mensaje: "No se encontró la transacción con el número proporcionado" });
+                    return res.status(500).json({ mensaje: "No se encontró la transacción con el número proporcionado" });
                 }
 
                 await Transaccion.findByIdAndUpdate(transaccion._id, { estado: 0 });
@@ -207,13 +207,13 @@ async function generarFactura(detalle, cliente, total, totalDescuento) {
 
         },
         async list(req, res) {
-            const { fechaInicial, fechaFinal } = req.body;
+            const { fechaInicio, fechaFinal } = req.body;
 
             let filtro = {};
 
-            if (fechaInicial || fechaFinal) {
+            if (fechaInicio || fechaFinal) {
                 filtro.fecha = {};
-                if (fechaInicial) filtro.fecha.$gte = new Date(fechaInicial);
+                if (fechaInicio) filtro.fecha.$gte = new Date(fechaInicio);
                 if (fechaFinal) filtro.fecha.$lte = new Date(fechaFinal);
             }
 
@@ -266,13 +266,13 @@ async function generarFactura(detalle, cliente, total, totalDescuento) {
         async list(req, res) {
             try
             {
-                const { fechaInicial, fechaFinal } = req.body;
+                const { fechaInicio, fechaFinal } = req.body;
 
                 let filtro = {};
 
-                if (fechaInicial || fechaFinal) {
+                if (fechaInicio || fechaFinal) {
                     filtro.fecha = {};
-                    if (fechaInicial) filtro.fecha.$gte = new Date(fechaInicial);
+                    if (fechaInicio) filtro.fecha.$gte = new Date(fechaInicio);
                     if (fechaFinal) filtro.fecha.$lte = new Date(fechaFinal);
                 }
 

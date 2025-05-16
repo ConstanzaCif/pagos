@@ -16,7 +16,7 @@ async getFacturaById(req, res) {
         const factura = await Factura.findOne({noFactura:id});
       
           if (!factura) {
-            return res.status(404).json({ mensaje: "Factura no encontrada" });
+            return res.status(500).json({ mensaje: "Factura no encontrada" });
           }
       
           const respuesta = {
@@ -64,7 +64,7 @@ async getFacturaById(req, res) {
               const factura = await Factura.findOne({ noFactura: noFactura });
       
               if (!factura) {
-                  return res.status(404).json({ mensaje: "No se encontró la factura con el número proporcionado" });
+                  return res.status(500).json({ mensaje: "No se encontró la factura con el número proporcionado" });
               }
       
               await Factura.findByIdAndUpdate(factura._id, { estado: 0 });
