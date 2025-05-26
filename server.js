@@ -20,6 +20,7 @@ const bancos = YAML.load('./docs/bancos.yaml')
 const cierres = YAML.load('./docs/cierres.yaml')
 const devoluciones = YAML.load('./docs/devoluciones.yaml')
 const metodos = YAML.load('./docs/metodos.yaml')
+const pagos = YAML.load('./docs/pagos.yaml')
 
 const swaggerDocument = merge.all([
   transacciones,
@@ -29,7 +30,8 @@ const swaggerDocument = merge.all([
   bancos,
   cierres,
   devoluciones,
-  metodos
+  metodos,
+  pagos
 ]);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
