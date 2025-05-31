@@ -22,6 +22,10 @@ exports.obtenerBancos = async (req, res) => {
 exports.obtenerBancoPorId = async (req, res) => {
     try {
         const banco = await Banco.findById(req.params.id);
+        if(!banco)
+        {
+            return res.status(500).json({mensaje: 'Banco no encontrado'})
+        }
         res.json({Banco: banco});
     } catch (error){
         res.status(500).json({mensaje: 'Error al obtener el banco'})

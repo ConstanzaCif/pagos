@@ -11,7 +11,7 @@ module.exports =
             const clientes = await Cliente.find().select('nombreCliente apellidosCliente nit direccion telefono email dpi tarjetaFidelidad estado');
             res.status(200).json({clientes:clientes});
         } catch (error) {
-            res.status(500).json({ mensaje: 'Error al obtener los clientes', error });
+            res.status(500).json({ mensaje: 'Error al obtener los clientes'});
         }
     },
     async buscarNit(req, res){
@@ -75,7 +75,7 @@ module.exports =
             const telefono = req.body.Telefono;
             const email = req.body.Email;
     
-            const clienteActualizado = await Cliente.findOneAndUpdate({_id: idCliente}, {
+            const clienteActualizado = await Cliente.findOneAndUpdate({_id: idCliente, estado: 1}, {
                 nombreCliente: nombreCliente,
                 apellidosCliente: apellidosCliente,
                 direccion: direccion,
@@ -85,7 +85,7 @@ module.exports =
              {new: true});
 
             if (!clienteActualizado) {
-                return res.status(500).json({ mensaje: "Cliente no encontrado" });
+                return res.status(400).json({ mensaje: "Cliente no encontrado" });
             }
             res.status(200).json({ClienteActualizado:clienteActualizado});
         } catch (error) {
@@ -98,10 +98,10 @@ module.exports =
         try
         {
             const idCliente = req.params.idCliente
-            const clienteElimianar = await Cliente.findOneAndUpdate({_id: idCliente}, {estado: 0})
+            const clienteElimianar = await Cliente.findOneAndUpdate({_id: idCliente, estado : 1}, {estado: 0})
 
             if(!clienteElimianar){
-                return res.status(500).json({ mensaje: "Cliente no encontrado" });
+                return res.status(400).json({ mensaje: "Cliente no encontrado" });
             }
 
             return res.status(200).json({mensaje: "Cliente eliminado exitosamente"})
@@ -112,6 +112,4 @@ module.exports =
             res.status(400).json({ mensaje: "Error al eliminar el cliente" });
         }
     },
-    
-
 }

@@ -10,15 +10,24 @@ module.exports =
             console.log(cliente)
             if(!cliente)
             {
-                return res.status(500).json({ mensaje: "Cliente no encontrado" });
+                return res.status(400).json({ mensaje: "Cliente no encontrado" });
             }
             const cantidadTarjetas = cliente.tarjetaFidelidad.length;
             console.log(cantidadTarjetas)
 
-            if(cantidadTarjetas != 0)
-            {
-                if(cliente.tarjetaFidelidad[cantidadTarjetas-1].estado == 1){
-                    return res.status(422).json({mensaje: "El cliente tiene una tarjeta de fidelidad activa"})
+            if (cantidadTarjetas != 0) {
+            const ultimaTarjeta = cliente.tarjetaFidelidad[cantidadTarjetas - 1];
+            const hoy = new Date();
+
+                if (ultimaTarjeta.estado == 1) {
+                    if (ultimaTarjeta.fechaExpiracion < hoy) {
+                        await Cliente.updateOne(
+                            { _id: idCliente, "tarjetaFidelidad.noTarjeta": ultimaTarjeta.noTarjeta },
+                            { $set: { "tarjetaFidelidad.$.estado": 0 } }
+                        );
+                    } else {
+                        return res.status(422).json({ mensaje: "El cliente tiene una tarjeta de fidelidad activa" });
+                    }
                 }
             }
 
@@ -55,7 +64,7 @@ module.exports =
                 console.log(cliente)
                 if(!cliente)
                 {
-                    return res.status(500).json({ mensaje: "Cliente no encontrado" });
+                    return res.status(400).json({ mensaje: "Cliente no encontrado" });
                 }
                 const cantidadTarjetas = cliente.tarjetaFidelidad.length;
                 console.log(cantidadTarjetas)
@@ -76,6 +85,4 @@ module.exports =
                 res.status(400).json({ mensaje: "Error al actualizar tarjeta" });
             }
     },
-
-
 }

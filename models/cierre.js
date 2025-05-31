@@ -57,8 +57,11 @@ const cierreSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    diferencia: {
+    totalDia: {
         type: Number,
+    },
+    retiro: {
+        type: Number
     },
     usuario: usuarioSchema,
 

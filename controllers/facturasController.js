@@ -104,6 +104,7 @@ async getFacturaById(req, res) {
                 Precio: item.precio || ""
               })) || [],
               Total: factura.total || "",
+              Estado: factura.estado,
               NotasCredito: factura.notasCredito?.map(nc => ({
                 IdNota: nc.noNotaCredito?.toString() || "",
                 Monto: nc.monto || "",

@@ -23,6 +23,24 @@ paths:
                 $ref: '#/components/schemas/FacturaRespuesta'
         '404':
           description: Factura no encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Mensaje:
+                    type: string
+                    example: No se encontro la factura
+        '500':
+          description: Error en el servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Mensaje:
+                    type: string
+                    example: Error interno del servidor
 
   /facturas/anular/{noFactura}:
     put:
@@ -133,6 +151,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NotaCredito'
+        Estado: 
+          type: number
 
     FacturaRespuesta:
       type: object

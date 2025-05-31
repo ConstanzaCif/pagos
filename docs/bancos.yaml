@@ -30,7 +30,7 @@ paths:
 
   /bancos/obtener:
     get:
-      summary: Obtener todos los bancos
+      summary: Obtener todos los bancos (activos y no)
       responses:
         '200':
           description: Lista de bancos
@@ -45,6 +45,14 @@ paths:
                       $ref: '#/components/schemas/Banco'
         '500':
           description: Error al obtener los bancos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Mensaje:
+                    type: string
+                    example: Error interno en el servidor
 
   /bancos/obtener/{id}:
     get:
@@ -67,6 +75,14 @@ paths:
                     $ref: '#/components/schemas/Banco'
         '500':
           description: Error al obtener el banco
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Mensaje:
+                    type: string
+                    example: Error interno en el servidor
 
   /bancos/eliminar/{id}:
     put:
@@ -153,10 +169,10 @@ components:
           items:
             $ref: '#/components/schemas/TransaccionBanco'
         createdAt:
-          type: date
+          type: string
           format: date-time
         updatedAt:
-          type: date
+          type: string
           format: date-time
 
     TransaccionBanco:

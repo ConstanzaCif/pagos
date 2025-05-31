@@ -37,6 +37,7 @@ paths:
                     example: Devolucion realizada correctamente
         '500':
           description: Error al crear la devolución
+          
 
   /devoluciones/obtener:
     get:
@@ -69,6 +70,14 @@ paths:
                       $ref: '#/components/schemas/Devolucion'
         '500':
           description: Error al obtener las devoluciones
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Mensaje:
+                    type: string
+                    example: Error interno en el servidor
 
   /devoluciones/obtener/{noDevolucion}:
     get:
@@ -89,10 +98,16 @@ paths:
                 properties:
                   Devolucion:
                     $ref: '#/components/schemas/Devolucion'
-        '404':
-          description: No se encontró la devolución
         '500':
           description: Error al obtener la devolución
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Mensaje:
+                    type: string
+                    example: Error interno en el servidor
 
 components:
   schemas:

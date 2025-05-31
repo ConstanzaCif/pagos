@@ -10,6 +10,7 @@ paths:
       summary: Crear una nueva tarjeta de fidelidad para un cliente
       parameters:
         - name: idCliente
+          description: debe ser un cliente activo que no tenga ya una tarjeta de fidelidad
           in: path
           required: true
           schema:
@@ -41,8 +42,13 @@ paths:
                     example: El cliente tiene una tarjeta de fidelidad activa
         '400':
           description: Error de validación
-        '500':
-          description: Cliente no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
 
   /cliente/fidelidad/desactivar/{idCliente}:
     put:
@@ -76,6 +82,11 @@ paths:
                     type: string
                     example: El cliente no tiene una tarjeta de fidelidad activa
         '400':
-          description: Error al actualizar tarjeta
-        '500':
-          description: Cliente no encontrado
+          description: Error al actualizar tarjeta 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string

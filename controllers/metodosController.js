@@ -3,18 +3,18 @@ const mongoose = require('mongoose');
 
 exports.obtenerMetodosPago = async (req, res) => {
     try {
-        const metodosPago = await MetodoPago.find({ estado: 1 }).select('_id metodo');
+        const metodosPago = await MetodoPago.find({ estado: 1 }).select('_id metodo noMetodo');
 
         const metodosTransformados = metodosPago.map(metodo => ({
             idMetodo: metodo._id,
-            Metodo: metodo.metodo
+            Metodo: metodo.metodo,
+            NoMetodo: metodo.noMetodo
         }));
 
         res.status(200).json(metodosTransformados);
     } catch (error) {
         res.status(500).json({
-            status: 500,
-            mensaje: `Ocurrió un error: ${error.message}`
+            mensaje: 'Ocurrió un error'
         });
     }
 };
@@ -53,7 +53,7 @@ exports.obtenerMetodoPagoPorId = async (req, res) => {
             });
         }
 
-        const metodoPago = await MetodoPago.findById(_id).select('_id metodo');
+        const metodoPago = await MetodoPago.findById(_id).select('_id metodo noMetodo');
 
         if (!metodoPago) {
             return res.status(404).json({
@@ -64,7 +64,8 @@ exports.obtenerMetodoPagoPorId = async (req, res) => {
         res.status(200).json({
 
                 idMetodo: metodoPago._id,
-                Metodo: metodoPago.metodo
+                Metodo: metodoPago.metodo,
+                NoMetodo: metodoPago.noMetodo
         });
     } catch (error) {
         res.status(500).json({
@@ -79,7 +80,7 @@ exports.create = async (req, res) => {
         const metodoPago = req.body.Metodo;
 
         if (!metodoPago) {
-            return res.status(500).json({mensaje:'El método de pago es obligatorio'});
+            return res.status(400).json({mensaje:'El método de pago es obligatorio'});
         }
 
         const nuevoMetodo = new MetodoPago({
@@ -101,10 +102,10 @@ exports.create = async (req, res) => {
 exports.eliminarMetodo = async (req, res) => {
     try {
 
-        const { _id } = req.params;
+        const {id_metodo} = req.params;
 
         const metodoEliminado = await MetodoPago.findByIdAndUpdate(
-            _id,
+            id_metodo,
             { estado: 0, updatedAt: new Date() },
             { new: true }
         );
@@ -133,8 +134,8 @@ exports.resumenPorMetodo  = async(req, res)  =>{
       const resumen = metodos.map(metodo => {
         let transaccionesFiltradas = metodo.transacciones;
   
-        if (fechaInicial || fechaFinal) {
-          const fi = fechaInicial ? new Date(fechaInicial) : new Date('1900-01-01');
+        if (fechaInicio || fechaFinal) {
+          const fi = fechaInicio ? new Date(fechaInicio) : new Date('1900-01-01');
           const ff = fechaFinal ? new Date(fechaFinal) : new Date();
           transaccionesFiltradas = transaccionesFiltradas.filter(tx => {
             const fechaTx = new Date(tx.createdAt || tx.fecha || metodo.updatedAt); 

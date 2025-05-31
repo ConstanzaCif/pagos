@@ -33,7 +33,7 @@ paths:
 
   /cliente/obtener:
     get:
-      summary: Obtener todos los clientes
+      summary: Obtener todos los clientes (activos e inactivos)
       responses:
         '200':
           description: Lista de clientes
@@ -48,10 +48,17 @@ paths:
                       $ref: '#/components/schemas/Cliente'
         '500':
           description: Error al obtener los clientes
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  mensaje: 
+                    type: string
 
-  /cliente/obtener/{nit}:
+  /clientes/obtener/{nit}:
     get:
-      summary: Buscar cliente por NIT
+      summary: Buscar cliente por NIT, solamente clientes activos
       parameters:
         - name: nit
           in: path
@@ -70,6 +77,13 @@ paths:
                     $ref: '#/components/schemas/ClienteList'
         '500':
           description: Cliente no encontrado o error al consultar
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  mensaje: 
+                    type: string
 
   /cliente/actualizar/{idCliente}:
     put:
@@ -98,6 +112,13 @@ paths:
                     $ref: '#/components/schemas/ClienteList'
         '400':
           description: Error al editar el cliente
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  mensaje: 
+                    type: string
 
   /cliente/eliminar/{idCliente}:
     put:
@@ -111,33 +132,38 @@ paths:
       responses:
         '200':
           description: Cliente eliminado exitosamente
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  mensaje: 
+                    type: string
         '400':
           description: Error al eliminar el cliente
-
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  mensaje: 
+                    type: string
 components:
   schemas:
     Cliente:
       type: object
       properties:
+        _id:
+          type: string
         nombreCliente:
           type: string
         apellidosCliente:
           type: string
         nit:
           type: string
-        direccion:
-          type: string
-        telefono:
-          type: string
-        email:
-          type: string
-        dpi:
-          type: string
-        estado:
-          type: number
-        _id:
-          type: string
         tarjetaFidelidad:
+          description: >
+            Lista de tarjetas de fidelidad asociadas al cliente. Puede estar vacía o ausente si el cliente no tiene tarjetas.
           type: array
           items:
             type: object
@@ -150,16 +176,25 @@ components:
                 type: string
                 format: date-time
               estado:
+                description: >
+                  0 --> Inactivo  
+                  1 --> Activo
                 type: integer
               _id:
                 type: string
-                format: uuid
-        createdAt:
+        direccion:
           type: string
-          format: date-time
-        updatedAt:
+        telefono:
           type: string
-          format: date-time
+        email:
+          type: string
+        dpi:
+          type: string
+        estado:
+          description: >
+            0 --> Inactivo  
+            1 --> Activo
+          type: number
 
     ClienteList:
       type: object
@@ -173,6 +208,7 @@ components:
         nit: 
           type: string
         tarjetaFidelidad:
+          description: Muestra las tarjetas de fidelidad, de no haber devuelve un arreglo vacio
           type: array
           items:
             type: object
@@ -185,26 +221,31 @@ components:
                 type: string
                 format: date-time
               estado:
+                description: >
+                  0 --> Inactivo  
+                  1 --> Activo
                 type: integer
               _id:
                 type: string
-                format: uuid
-          direccion:
-            type: string
-          telefono:
-            type: string
-          email:
-            type: string
-          dpi: 
-            type: string
-          estado:
-            type: number
-          createdAt:
-            type: string
-            format: date-time
-          updatedAt:
-            type: string
-            format: date-time
+        direccion:
+          type: string
+        telefono:
+          type: string
+        email:
+          type: string
+        dpi: 
+          type: string
+        estado:
+          description: >
+            0 --> Inactivo  
+            1 --> Activo
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
 
 
 

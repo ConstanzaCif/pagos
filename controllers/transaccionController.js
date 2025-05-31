@@ -94,6 +94,7 @@ async function generarFactura(detalle, cliente, total, totalDescuento) {
     const objetoFactura = new Factura({
         noFactura: noFactura,
         detalle: detalle,
+        estado:1,
         total: total,
         totalDescontado: totalDescuento,
         cliente: clienteFactura,
@@ -112,6 +113,10 @@ async function generarFactura(detalle, cliente, total, totalDescuento) {
                 let filtro = {};
 
                 filtro.servicioTransaccion = parseInt(idServicio);
+                if(idServicio < 0 || idServicio > 7)
+                {
+                    return res.status(500).json({ mensaje: "Servicio no valido" });
+                }
                 if (fechaInicio || fechaFinal) {
                     filtro.fecha = {};
                     if (fechaInicio) filtro.fecha.$gte = new Date(fechaInicio);
@@ -190,6 +195,7 @@ async function generarFactura(detalle, cliente, total, totalDescuento) {
                         NoAutorizacion: transaccion.noAutorizacion,
                         NoTransacion: transaccion.noTransaccion,
                         Fecha: transaccion.fecha,
+                        IdCliente: transaccion.idCliente,
                         NoFactura: transaccion.noFactura,
                         Total: transaccion.total,
                         IdCaja: transaccion.idCaja,
@@ -332,7 +338,7 @@ async function generarFactura(detalle, cliente, total, totalDescuento) {
                     if (!cliente) {
                         return res.status(500).json({ mensaje: "El cliente no existe en la base de datos, debe crearlo" })
                     }
-                    if (servicioTransaccion1 < 1 && servicioTransaccion1 > 8) {
+                    if (servicioTransaccion1 < 1 || servicioTransaccion1 > 8) {
                         return res.status(500).json({ mensaje: "El servicio ingresado no es valido" })
                     }
                 }

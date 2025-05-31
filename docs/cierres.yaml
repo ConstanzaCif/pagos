@@ -5,7 +5,7 @@ info:
   description: Endpoints para crear y obtener cierres de caja.
 
 paths:
-  /cierres/obtener:
+  /cierre/obtener:
     get:
       summary: Obtener cierres de caja por rango de fechas (opcional)
       requestBody:
@@ -37,7 +37,7 @@ paths:
         '500':
           description: Error al obtener los cierres
 
-  /cierres/crear:
+  /cierre/crear:
     post:
       summary: Crear un nuevo cierre de caja
       requestBody:
@@ -55,6 +55,14 @@ paths:
                 $ref: '#/components/schemas/CierreCajaCreado'
         '500':
           description: Error al crear el cierre
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Mensaje:
+                    type: string
+                    example: El cierre no cuadra
 
 components:
   schemas:
@@ -62,9 +70,9 @@ components:
       type: object
       properties:
         IdCaja:
-          type: string
+          type: number
         Servicio:
-          type: string
+          type: number
         CantidadFinal:
           type: number
           description: cantidad contada de forma fisica
@@ -75,6 +83,8 @@ components:
               type: string
             NombreCompleto:
               type: string
+        Retiro:
+          type: number
 
     CierreCaja:
       type: object
@@ -123,7 +133,7 @@ components:
           format: date-time
         CantidadFinal:
           type: number
-        Diferencia:
+        TotalDia:
           type: number
         Usuario:
           type: array

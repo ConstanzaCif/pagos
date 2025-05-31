@@ -19,7 +19,7 @@ module.exports = (app) => {
     //Clientes
     router.post('/cliente/crear', clientesController.create)
     router.get('/cliente/obtener', clientesController.list)
-    router.get('/cliente/obtener/:nit', clientesController.buscarNit)
+    router.get('/clientes/obtener/:nit', clientesController.buscarNit)
     router.put('/cliente/actualizar/:idCliente', clientesController.update)
     router.put('/cliente/eliminar/:idCliente', clientesController.delete)
 
@@ -36,8 +36,8 @@ module.exports = (app) => {
     router.get('/metodos/resumen_metodo_pago', metodo.resumenPorMetodo)
 
     // Cierre de caja
-    router.get('/cierres/obtener', cierre.obtenerCierres); 
-    router.post('/cierres/crear', cierre.create);
+    router.get('/cierre/obtener', cierre.obtenerCierres); 
+    router.post('/cierre/crear', cierre.create);
     
     //BANCOS
     router.post('/bancos/crear',bancosController.crearBanco);
@@ -48,7 +48,7 @@ module.exports = (app) => {
 
     //TRANSACCION
     router.post('/transacciones/crear', transaccionesController.create);
-    router.put('/transacciones/anular/:noTransaccion',transaccionesController.anular)
+    router.put('/transaccion/anular/:noTransaccion',transaccionesController.anular)
     router.get('/transacciones/obtener/:noTransaccion',transaccionesController.listById);
     router.get('/transacciones/obtener',transaccionesController.list)
     router.get('/transacciones/obtenerPorServicio/:idServicio',transaccionesController.listByService)

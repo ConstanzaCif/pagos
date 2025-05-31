@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: API de Métodos de Pago
   version: 1.0.0
-  description: Endpoints para la gestión de métodos de pago en el microservicio de pagos.
+  description: Endpoints para la gestión de métodos de pago en el microservicio de pagos. El programa esta contemplado para los 5 metodos ya definidos debido a la lógica específica de cada uno de ellos por lo que este apartado se hace para futura escalabilidad pero no contempla poder crear nuevos métodos sin realizar cambios a nivel de código
 
 paths:
   /metodos/crear:
@@ -22,22 +22,24 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: number
-                    example: 200
                   mensaje:
                     type: string
                     example: Método creado exitosamente
         '400':
           description: Datos inválidos o incompletos
-        '500':
-          description: Error interno al crear el método
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
 
-  /metodos/eliminar/{_id}:
+  /metodos/eliminar/{id_metodo}:
     put:
       summary: Eliminar (desactivar) un método de pago
       parameters:
-        - name: _id
+        - name: id_metodo
           in: path
           required: true
           schema:
@@ -50,16 +52,18 @@ paths:
               schema:
                 type: object
                 properties:
-                  status:
-                    type: number
-                    example: 200
                   mensaje:
                     type: string
                     example: Metodo eliminado exitosamente
-        '404':
-          description: Método no encontrado
         '500':
-          description: Error interno del servidor
+          description: Error al eliminar
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
 
   /metodos/obtener:
     get:
@@ -79,11 +83,11 @@ paths:
         '500':
           description: Error al obtener los métodos
 
-  /metodos/obtener/{_id}:
+  /metodos/obtener/{idMetodo}:
     get:
       summary: Obtener un método de pago por ID
       parameters:
-        - name: _id
+        - name: idMetodo
           in: path
           required: true
           schema:
@@ -100,8 +104,22 @@ paths:
                     $ref: '#/components/schemas/MetodoPagoResumen'
         '404':
           description: Método no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
         '500':
           description: Error al obtener el método
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
 
   /metodos/obtenerTransacciones/{noMetodo}:
     get:
@@ -186,12 +204,14 @@ components:
     MetodoPagoResumen:
       type: object
       properties:
-        IdMetodo:
+        idMetodo:
           type: string
           example: 680acb86cf828c89e6a56b22
         Metodo:
           type: string
           example: Efectivo
+        NoMetodo:
+          type: number
 
     TransaccionMetodoPago:
       type: object

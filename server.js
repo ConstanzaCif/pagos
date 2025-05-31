@@ -38,7 +38,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const connectDB = async () => {
   try {
-      await mongoose.connect('mongodb://localhost:27017/pagos', {
+    //mongodb://localhost:27017/pagos conexion local
+      await mongoose.connect('mongodb+srv://sebastianrocop7:silotengoquepediryanoquiero@cluster0.4nad6qy.mongodb.net/pagos', {
           useNewUrlParser: true,
           useUnifiedTopology: true,
       });

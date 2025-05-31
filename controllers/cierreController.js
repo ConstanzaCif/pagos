@@ -25,15 +25,13 @@ exports.obtenerCierres = async (req, res) => {
             Fecha: cierre.fecha,
             CantidadInicial: cierre.cantidadIncial || 0,
             CantidadFinal: cierre.cantidadFinal,
-            Diferencia: cierre.diferencia || 0,
+            TotalDia: cierre.totalDia || 0,
+            Retiro: cierre.retiro,
             Empleado: cierre.usuario.length > 0 ? {
                 IdEmpleado: cierre.usuario[0].idUsuario,
                 NombreCompleto: cierre.usuario[0].nombreUsuario
             } : {},
-            Retiros: (cierre.retiros || []).map(retiro => ({ // Usa un array vacío si retiros es null o undefined
-                NoRetiro: retiro.idRetiro,
-                Monto: retiro.monto
-            }))
+            
         }));
 
         res.status(200).json({ cierre: resultado });
@@ -49,27 +47,32 @@ exports.obtenerCierres = async (req, res) => {
 exports.create = async (req, res) => {
     try {
         console.log(req.body);
-        const nuevoCierre = new CierreCaja(req.body);
+        const cantidad_retirar = req.body.Retiro;
         const idCaja = req.body.IdCaja;
         const idServicio = req.body.Servicio;
         const cantidadFinal = req.body.CantidadFinal;
         const empleado = req.body.Empleado;
         const fecha = new Date();
         const soloFecha = fecha.toISOString().split('T')[0];
-        const Transacciones = await Transaccion.filtrarPorFecha(soloFecha,idServicio,idCaja);
-        console.log(Transacciones);
         let totalDia = 0;
         const ultimoCierre = await CierreCaja.findOne({
             idCaja: idCaja,         
-            idServicio: idServicio     
-        }).sort({ fecha: -1 });
+            idServicio: idServicio   
+        }).sort({ createdAt: -1 });
         let cantidadInicial = 0;
-        console.log("EL ULTIMO CIERRE ES", ultimoCierre);
+        let fechaInicioFiltro = new Date('1900-01-01');
         if(ultimoCierre){
             cantidadInicial = ultimoCierre.cantidadFinal;
+            fechaInicioFiltro = ultimoCierre.createdAt;
             console.log(cantidadInicial);
         }
-
+        const fechaFinFiltro = new Date();
+        const Transacciones = await Transaccion.find({
+            servicioTransaccion: idServicio,
+            idCaja: idCaja,
+            createdAt: { $gt: fechaInicioFiltro, $lte: fechaFinFiltro }
+        });
+        console.log(Transacciones);
         for (const transaccion of Transacciones){
             console.log(transaccion);
             for(const metodoPago of transaccion.metodosPago){
@@ -77,38 +80,39 @@ exports.create = async (req, res) => {
                 if(metodoPago.idMetodo == 1){
                     totalDia += metodoPago.monto;
                 }
-
             }
         }
-        const retiros = await Retiros.filtrarPorFecha(soloFecha,idServicio,idCaja);
-        let cantidadRetirada = 0;
-        for(const retiro of retiros){
-            cantidadRetirada += retiro.monto;
+        if((cantidadInicial + totalDia) < cantidad_retirar)
+        {
+            return res.status(500).json({mensaje: "La cantidad a retirar es mayor a la cantidad que existe" });
         }
-        let cantidadFinal1 = cantidadInicial + totalDia - cantidadRetirada;
+        if((cantidadInicial + totalDia)!= cantidadFinal)
+        {
+            return res.status(500).json({mensaje: "No se puede hacer el cierre debido a que no cuadra"})
+        }
+        let cantidadFinal1 = cantidadInicial + totalDia - cantidad_retirar;
         console.log(totalDia);
-
         const ObjetoCierre = new CierreCaja ({
             idCaja: idCaja,
             idServicio: idServicio,
             fecha: soloFecha,
             cantidadInicial: cantidadInicial,
             cantidadFinal: cantidadFinal1,
-            diferencia: cantidadFinal1 - cantidadFinal,
+            totalDia: totalDia,
             usuario: {
                 idUsuario: empleado.IdEmpleado,
                 nombreUsuario: empleado.NombreCompleto
-            }
+            },
+            retiro: cantidad_retirar
         });
         const cierreGuardado = await ObjetoCierre.save();
         console.log(cierreGuardado);
-
         const objetoCierreGuardado = {
             IdCaja: cierreGuardado.idCaja,
             IdServicio: cierreGuardado.idServicio,
             Fecha: cierreGuardado.fecha,
             CantidadFinal: cierreGuardado.cantidadFinal,
-            Diferencia: cierreGuardado.diferencia,
+            TotalDia: cierreGuardado.totalDia,
             Usuario: [
                 {
                     idUsuario: cierreGuardado.usuario.idUsuario,
@@ -119,7 +123,6 @@ exports.create = async (req, res) => {
             CreatedAt: cierreGuardado.createdAt,
             UpdatedAt:cierreGuardado.updatedAt 
         }
-        //await nuevoCierre.save();
         res.status(201).json(objetoCierreGuardado);
     } catch (error) {
         console.error('Error al crear cierre de caja:', error);
@@ -139,9 +142,3 @@ exports.create = async (req, res) => {
 
 //     }
 // }
-
-
-
-
-
-
