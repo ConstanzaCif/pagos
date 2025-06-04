@@ -20,7 +20,7 @@ module.exports = (app) => {
     router.put('/cliente/eliminar/:id_cliente', clientesController.delete)
 
     //Tarjeta fidelidad
-    router.post('/cliente/fidelidad/crear/:id_cliente', fidelidadController.agregar)
+    router.put('/cliente/fidelidad/crear/:id_cliente', fidelidadController.agregar)
     router.put('/cliente/fidelidad/desactivar/:id_cliente', fidelidadController.desactivar)
 
     //Métodos de pago
