@@ -45,7 +45,7 @@ exports.obtenerTransaccionesMetodo = async (req, res) => {
 }
 exports.obtenerMetodoPagoPorId = async (req, res) => {
     try {
-        const { _id } = req.params.idMetodo;
+        const _id  = req.params.idMetodo;
 
         if (!mongoose.Types.ObjectId.isValid(_id)) {
             return res.status(400).json({
@@ -102,7 +102,7 @@ exports.create = async (req, res) => {
 exports.eliminarMetodo = async (req, res) => {
     try {
 
-        const {id_metodo} = req.params;
+        const id_metodo = req.params.id_metodo;
 
         const metodoEliminado = await MetodoPago.findByIdAndUpdate(
             id_metodo,
