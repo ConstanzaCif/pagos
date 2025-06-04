@@ -5,7 +5,7 @@ module.exports =
 {
     async agregar(req, res){
         try{
-            const idCliente = req.params.idCliente
+            const idCliente = req.params.id_cliente
             const cliente = await Cliente.findOne({_id: idCliente, estado: 1})
             console.log(cliente)
             if(!cliente)
@@ -59,7 +59,7 @@ module.exports =
     },
     async desactivar(req, res){
             try{
-                const idCliente = req.params.idCliente
+                const idCliente = req.params.id_cliente
                 const cliente = await Cliente.findOne({_id: idCliente, estado: 1})
                 console.log(cliente)
                 if(!cliente)

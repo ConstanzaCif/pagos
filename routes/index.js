@@ -20,18 +20,18 @@ module.exports = (app) => {
     router.post('/cliente/crear', clientesController.create)
     router.get('/cliente/obtener', clientesController.list)
     router.get('/clientes/obtener/:nit', clientesController.buscarNit)
-    router.put('/cliente/actualizar/:idCliente', clientesController.update)
-    router.put('/cliente/eliminar/:idCliente', clientesController.delete)
+    router.put('/cliente/actualizar/:id_cliente', clientesController.update)
+    router.put('/cliente/eliminar/:id_cliente', clientesController.delete)
 
     //Tarjeta fidelidad
-    router.post('/cliente/fidelidad/crear/:idCliente', fidelidadController.agregar)
-    router.put('/cliente/fidelidad/desactivar/:idCliente', fidelidadController.desactivar)
+    router.post('/cliente/fidelidad/crear/:id_cliente', fidelidadController.agregar)
+    router.put('/cliente/fidelidad/desactivar/:id_cliente', fidelidadController.desactivar)
 
     //Métodos de pago
     router.post('/metodos/crear', metodo.create);
-    router.put('/metodos/eliminar/:_id', metodo.eliminarMetodo);
+    router.put('/metodos/eliminar/:id_metodo', metodo.eliminarMetodo);
     router.get('/metodos/obtener', metodo.obtenerMetodosPago);
-    router.get('/metodos/obtener/:_id', metodo.obtenerMetodoPagoPorId);
+    router.get('/metodos/obtener/:idMetodo', metodo.obtenerMetodoPagoPorId);
     router.get('/metodos/obtenerTransacciones/:noMetodo', metodo.obtenerTransaccionesMetodo)
     router.get('/metodos/resumen_metodo_pago', metodo.resumenPorMetodo)
 

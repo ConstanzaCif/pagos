@@ -68,7 +68,7 @@ module.exports =
     async update(req, res) {
         try {
             console.log("Cuerpo recibido:", req.body);
-            const idCliente = req.params.idCliente
+            const idCliente = req.params.id_cliente
             const nombreCliente = req.body.NombreCliente;
             const apellidosCliente = req.body.ApellidosCliente;
             const direccion = req.body.Direccion;
@@ -97,7 +97,7 @@ module.exports =
     {
         try
         {
-            const idCliente = req.params.idCliente
+            const idCliente = req.params.id_cliente
             const clienteElimianar = await Cliente.findOneAndUpdate({_id: idCliente, estado : 1}, {estado: 0})
 
             if(!clienteElimianar){
